@@ -73,17 +73,23 @@ def data_form():
         end_time=st.time_input(Labels[11], value=st.session_state.Etime)
 
         obj_bg = st.number_input(Labels[13])
-        median=st.number_input(Labels[17], value=statistics.median([meas1,meas2,meas3]))
-        med_sub=st.number_input(Labels[18], value=median-obj_bg)
-        result = st.number_input(Labels[19], value=med_sub*calibration_value)
+        median=statistics.median([meas1,meas2,meas3])
+        st.write(Labels[17])
+        st.text(median)
+        med_sub=median-obj_bg
+        st.write(Labels[18])
+        st.text(med_sub)
+        result =med_sub*calibration_value
+        st.write(Labels[19])
+        st.text(result)
 
-    colD,colN,colE,colC=st.columns((6,1,1,1.2))
+    colD,colE,colC=st.columns((6,1.4,1.6))
     with colD:
         if result > threshold:
             st.error(':red[補正値が基準値を超えています]')
 
-    with colN:
-        if st.button('次へ'):
+    with colE:
+        if st.button('保存/次へ'):
             Data=[group_num,date,place,players,machine_num,calibration_date,calibration_value,time_const,
                 env_bg,threshold,start_time,end_time,obj_id,obj_bg,meas1,meas2,meas3,median,med_sub,result]
             df_add=pd.DataFrame([Data],columns=Labels)
@@ -91,8 +97,6 @@ def data_form():
             st.session_state.df=pd.concat([st.session_state.df, df_add], ignore_index=True)
             flag=1
 
-    with colE:
-        if st.button('保存'):
             output_file=str(date)+'.csv'
             if os.path.exists(output_file):
                 st.session_state.df.to_csv(output_file, index=False, mode='a', header=False)
@@ -101,7 +105,7 @@ def data_form():
             #st.session_state.df=pd.DataFrame(columns=Labels)
 
     with colC:
-        if st.button('クリア'):
+        if st.button('クリア/終了'):
             st.session_state.df=pd.DataFrame(columns=Labels)
 
     st.markdown('---')

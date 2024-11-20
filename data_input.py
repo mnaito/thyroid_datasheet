@@ -76,13 +76,13 @@ def data_form():
         obj_bg = st.number_input(Labels[13])
         median=statistics.median([meas1,meas2,meas3])
         st.write(Labels[17])
-        st.text(median)
+        st.text('%.2f'%median)
         med_sub=median-obj_bg
         st.write(Labels[18])
-        st.text(med_sub)
+        st.text('%.2f'%med_sub)
         result =med_sub*calibration_value
         st.write(Labels[19])
-        st.text(result)
+        st.text('%.2f'%result)
 
     colD,colE,colC=st.columns((6,1.4,1.6))
     with colD:
@@ -90,7 +90,7 @@ def data_form():
             st.error(':red[補正値が基準値を超えています]')
 
     with colE:
-        if st.button('保存/次へ'):
+        if st.button('入力/次へ'):
             Data=[group_num,date,place,players,machine_num,calibration_date,calibration_value,time_const,
                 env_bg,threshold,start_time,end_time,obj_id,obj_bg,meas1,meas2,meas3,median,med_sub,result]
             df_add=pd.DataFrame([Data],columns=Labels)
@@ -100,7 +100,7 @@ def data_form():
 
 
     with colC:
-        if st.button('クリア/終了'):
+        if st.button('保存/終了'):
             conn = sqlite3.connect('meas_database.db')
             c=conn.cursor()
 

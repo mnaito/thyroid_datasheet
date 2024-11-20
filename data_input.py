@@ -72,7 +72,7 @@ def data_form():
         med_sub=st.number_input(Labels[18], value=median-obj_bg)
         result = st.number_input(Labels[19], value=med_sub*calibration_value)
 
-    colD,colN,colE=st.columns((8,1,1))
+    colD,colN,colE,colC=st.columns((6,1,1,1.2))
     with colD:
         if result > threshold:
             st.error(':red[補正値が基準値を超えています]')
@@ -94,7 +94,11 @@ def data_form():
             else:
                 st.session_state.df.to_csv(output_file, index=False, mode='a', header=True)
             #st.session_state.df=pd.DataFrame(columns=Labels)
- 
+
+    with colC:
+        if st.button('クリア'):
+            st.session_state.df=pd.DataFrame(columns=Labels)
+
     st.markdown('---')
 
     editable_df=st.data_editor(st.session_state.df, num_rows='dynamic')

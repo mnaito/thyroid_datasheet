@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 import japanize_matplotlib
+import sqlite3
 from datetime import datetime
 
 def comparison():
@@ -14,8 +15,12 @@ def comparison():
     file = st.date_input('**測定日**', value='today')
     total = st.number_input('**班数**', value=12)
     if st.button('**データ更新**'):
-        filename=str(file)+'.csv'
-        st.session_state.df_analysis=pd.read_csv(filename)
+        conn = sqlite3.connect('meas_database.db')
+        c=conn.cursor()
+        
+        st.session_state.df_analysis=pd.read_sql_query('SELECT * FROM `%s`'% str(file), conn)
+
+        conn.close()
 
         df_a=pd.DataFrame()
         df_i=pd.DataFrame()
@@ -41,7 +46,7 @@ def comparison():
 
 
     st.subheader('**Data**')
-    st.dataframe(st.session_state.df_analysis)
+    st.dataframe(st.session_state.df_analysis,hide_index=True)
     csv_data=st.session_state.df_total.to_csv(index=True, mode='w', header=True).encode('utf-8')
     st.download_button(
         label='**csv保存**',

@@ -3,6 +3,7 @@ import statistics
 import pandas as pd
 from datetime import datetime, timezone
 from zoneinfo import ZoneInfo
+import sqlite3
 import os
 
 def data_form():
@@ -95,17 +96,17 @@ def data_form():
             df_add=pd.DataFrame([Data],columns=Labels)
 
             st.session_state.df=pd.concat([st.session_state.df, df_add], ignore_index=True)
-            flag=1
 
-            output_file=str(date)+'.csv'
-            if os.path.exists(output_file):
-                st.session_state.df.to_csv(output_file, index=False, mode='a', header=False)
-            else:
-                st.session_state.df.to_csv(output_file, index=False, mode='a', header=True)
-            #st.session_state.df=pd.DataFrame(columns=Labels)
+
 
     with colC:
         if st.button('クリア/終了'):
+            conn = sqlite3.connect('meas_database.db')
+            c=conn.cursor()
+
+            st.session_state.df.to_sql(str(date),conn,if_exists='append', index=False)
+
+            conn.close()
             st.session_state.df=pd.DataFrame(columns=Labels)
 
     st.markdown('---')

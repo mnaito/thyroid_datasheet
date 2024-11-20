@@ -6,14 +6,14 @@ from datetime import datetime
 
 def comparison():
     if 'df_total' not in st.session_state:
-        st.session_state.df=pd.DataFrame()
+        st.session_state.df_analysis=pd.DataFrame()
         st.session_state.df_total=pd.DataFrame()
         st.session_state.clear_data=False
     file = st.date_input('**測定日**', value='today')
-    total = st.number_input('**班数**', value=3)
+    total = st.number_input('**班数**', value=12)
     if st.button('**データ更新**'):
         filename=str(file)+'.csv'
-        st.session_state.df=pd.read_csv(filename)
+        st.session_state.df_analysis=pd.read_csv(filename)
 
         df_a=pd.DataFrame()
         df_i=pd.DataFrame()
@@ -22,11 +22,11 @@ def comparison():
             results_add=[]
             dic={}
             dic_sorted=[]
-            df_a=st.session_state.df[st.session_state.df['班番号']==i]
+            df_a=st.session_state.df_analysis[st.session_state.df_analysis['班番号']==i]
             obj_id=df_a['被検者ID'].to_list()
             results=df_a['正味値'].to_list()
             if obj_id == []:
-                break
+                continue
             dic.update(zip(obj_id,results))
             dic_sorted = sorted(dic.items(), key=lambda x:x[0])
             for dataset in dic_sorted:
@@ -37,13 +37,24 @@ def comparison():
             data=pd.Series(results_add,index=obj_id_add, name=i)
             st.session_state.df_total=pd.concat([st.session_state.df_total,data], axis=1)
 
-    st.dataframe(st.session_state.df)
-    st.dataframe(st.session_state.df_total)
 
-    colR1, colR2 = st.columns((8,1.2))
-    with colR2:
-        if st.button('**csv保存**'):
-            st.session_state.df_total.to_csv(str(file)+'_summary.csv', index=True, mode='w', header=True)
+    st.subheader('**Data**')
+    st.dataframe(st.session_state.df_analysis)
+    csv_data=st.session_state.df_total.to_csv(index=True, mode='w', header=True).encode('utf-8')
+    st.download_button(
+        label='**csv保存**',
+        data=csv_data,
+        file_name=str(file)+'.csv', 
+    )
+
+    st.subheader('**Summary**')
+    st.dataframe(st.session_state.df_total)
+    csv_summary=st.session_state.df_total.to_csv(index=True, mode='w', header=True).encode('utf-8')
+    st.download_button(
+        label='**csv保存**',
+        data=csv_summary,
+        file_name=str(file)+'_summary.csv', 
+    )
 
     #fig, ax = plt.subplots()
     #ax.bar(st.session_state.df_total.index,[st.session_state.df_total])

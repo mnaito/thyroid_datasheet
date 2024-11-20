@@ -1,7 +1,8 @@
 import streamlit as st
 import statistics
 import pandas as pd
-from datetime import datetime
+from datetime import datetime, timezone
+from zoneinfo import ZoneInfo
 import os
 
 def data_form():
@@ -26,8 +27,9 @@ def data_form():
     calibrationV=1.00
     environment=0.05
     threshold_value=0.2
-    Stime='now'
-    Etime='now'
+    now = datetime.now(ZoneInfo("Asia/Tokyo"))
+    Stime=now
+    Etime=now
     ID='被検者ID'
 
 

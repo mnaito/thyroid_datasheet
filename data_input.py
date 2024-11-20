@@ -60,8 +60,7 @@ def data_form():
 
     with colB1:
         if st.button('測定開始'):
-            now = datetime.now(ZoneInfo("Asia/Tokyo")).time()
-            st.session_state.Stime= now
+            st.session_state.Stime= datetime.now(ZoneInfo("Asia/Tokyo")).time()
         start_time=st.time_input(Labels[10], value=st.session_state.Stime)
         obj_id = st.text_input(Labels[12], value=ID)
         meas1 = st.number_input(Labels[14])
@@ -70,8 +69,7 @@ def data_form():
 
     with colB2:
         if st.button('測定終了'):
-            now = datetime.now(ZoneInfo("Asia/Tokyo")).time()
-            st.session_state.Etime= now
+            st.session_state.Etime= datetime.now(ZoneInfo("Asia/Tokyo")).time()
         end_time=st.time_input(Labels[11], value=st.session_state.Etime)
 
         obj_bg = st.number_input(Labels[13])

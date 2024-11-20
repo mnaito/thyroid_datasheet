@@ -1,5 +1,7 @@
 streamlit
-numpy
+pandas
 matplotlib
-scipy
-altair==4.0
+japanize_matplotlib
+datetime
+os
+statistics

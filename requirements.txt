@@ -4,4 +4,3 @@ matplotlib
 japanize-matplotlib
 datetime
 statistics
-sqlite3

@@ -15,7 +15,7 @@ def comparison():
     total = st.number_input('**班数**', value=12)
 
     db_file='meas_database.db'
-    colDupdate,colDdownload,colDummy=st.columns((1.2,1,5))
+    colDupdate,colDdownload,colDummy=st.columns((1.3,1.1,5))
     with colDupdate:
         if st.button('**データ更新**'):
             st.session_state.df_analysis=pd.DataFrame()
@@ -54,7 +54,7 @@ def comparison():
             db_data=db.read()
 
         st.download_button(
-            label="**DB出力**",
+            label="**全DB出力**",
             data=db_data,
             file_name=db_file
         )

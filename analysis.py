@@ -3,6 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import japanize_matplotlib
 import sqlite3
+import statistics
 from datetime import datetime
 
 def comparison():
@@ -64,3 +65,19 @@ def comparison():
     )
 
     st.pyplot(st.session_state.df_total.plot.bar(ylabel='正味値', xlabel='被検者ID', rot=0).figure)
+
+    means=[]
+    stdevs=[]
+    for k in range(st.session_state.df_total.shape[0]):
+        mean=statistics.mean(st.session_state.df_total.iloc[k])
+        means.append(mean)
+        stdev=statistics.stdev(st.session_state.df_total.iloc[k])
+        stdevs.append(stdev)
+
+    fig,ax=plt.subplots()
+    ax.scatter(means,stdevs)
+    ax.set_xlabel('平均値')
+    ax.set_ylabel('標準偏差 (1$\\sigma$)')
+    st.pyplot(fig)
+    
+

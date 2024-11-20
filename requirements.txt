@@ -1,0 +1,5 @@
+streamlit
+numpy
+matplotlib
+scipy
+altair==4.0

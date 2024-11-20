@@ -17,7 +17,7 @@ def comparison():
     db_file='meas_database.db'
     colDupdate,colDdownload,colDummy=st.columns((1.3,1.1,5))
     with colDupdate:
-        if st.button('**データ更新**'):
+        if st.button('**データ取得**'):
             st.session_state.df_analysis=pd.DataFrame()
             st.session_state.df_total=pd.DataFrame()
             conn = sqlite3.connect(db_file)

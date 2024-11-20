@@ -9,6 +9,8 @@ def comparison():
         st.session_state.df_analysis=pd.DataFrame()
         st.session_state.df_total=pd.DataFrame()
         st.session_state.clear_data=False
+    st.session_state.df_analysis=pd.DataFrame()
+    st.session_state.df_total=pd.DataFrame()
     file = st.date_input('**測定日**', value='today')
     total = st.number_input('**班数**', value=12)
     if st.button('**データ更新**'):

@@ -10,11 +10,11 @@ def comparison():
         st.session_state.df_analysis=pd.DataFrame()
         st.session_state.df_total=pd.DataFrame()
         st.session_state.clear_data=False
-    st.session_state.df_analysis=pd.DataFrame()
-    st.session_state.df_total=pd.DataFrame()
     file = st.date_input('**測定日**', value='today')
     total = st.number_input('**班数**', value=12)
     if st.button('**データ更新**'):
+        st.session_state.df_analysis=pd.DataFrame()
+        st.session_state.df_total=pd.DataFrame()
         conn = sqlite3.connect('meas_database.db')
         c=conn.cursor()
         
@@ -47,7 +47,7 @@ def comparison():
 
     st.subheader('**Data**')
     st.dataframe(st.session_state.df_analysis,hide_index=True)
-    csv_data=st.session_state.df_total.to_csv(index=True, mode='w', header=True).encode('utf-8')
+    csv_data=st.session_state.df_analysis.to_csv(index=True, mode='w', header=True).encode('utf-8_sig')
     st.download_button(
         label='**csv保存**',
         data=csv_data,
@@ -56,15 +56,11 @@ def comparison():
 
     st.subheader('**Summary**')
     st.dataframe(st.session_state.df_total)
-    csv_summary=st.session_state.df_total.to_csv(index=True, mode='w', header=True).encode('utf-8')
+    csv_summary=st.session_state.df_total.to_csv(index=True, mode='w', header=True).encode('utf-8_sig')
     st.download_button(
         label='**csv保存**',
         data=csv_summary,
         file_name=str(file)+'_summary.csv', 
     )
-
-    #fig, ax = plt.subplots()
-    #ax.bar(st.session_state.df_total.index,[st.session_state.df_total])
-    #st.pyplot(fig)
 
     st.pyplot(st.session_state.df_total.plot.bar(ylabel='正味値', xlabel='被検者ID', rot=0).figure)

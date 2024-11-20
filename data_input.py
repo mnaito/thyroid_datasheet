@@ -17,6 +17,9 @@ def data_form():
     if 'df' not in st.session_state:
         st.session_state.df=pd.DataFrame(columns=Labels)
         st.session_state.clear_data=False
+        now = datetime.now(ZoneInfo("Asia/Tokyo"))
+        st.session_state.Stime=now
+        st.session_state.Etime=now
 
     Gnumber=0
     date_value='today'
@@ -26,10 +29,10 @@ def data_form():
     calibrationD='today'
     calibrationV=1.00
     environment=0.05
+    #now = datetime.now(ZoneInfo("Asia/Tokyo"))
+    #Stime=now
+    #Etime=now
     threshold_value=0.2
-    now = datetime.now(ZoneInfo("Asia/Tokyo"))
-    Stime=now
-    Etime=now
     ID='被検者ID'
 
 
@@ -57,8 +60,9 @@ def data_form():
 
     with colB1:
         if st.button('測定開始'):
-            Stime= now
-        start_time=st.time_input(Labels[10], value=Stime)
+            now = datetime.now(ZoneInfo("Asia/Tokyo")).time()
+            st.session_state.Stime= now
+        start_time=st.time_input(Labels[10], value=st.session_state.Stime)
         obj_id = st.text_input(Labels[12], value=ID)
         meas1 = st.number_input(Labels[14])
         meas2 = st.number_input(Labels[15])
@@ -66,8 +70,9 @@ def data_form():
 
     with colB2:
         if st.button('測定終了'):
-            Etime= now
-        end_time=st.time_input(Labels[11], value=Etime)
+            now = datetime.now(ZoneInfo("Asia/Tokyo")).time()
+            st.session_state.Etime= now
+        end_time=st.time_input(Labels[11], value=st.session_state.Etime)
 
         obj_bg = st.number_input(Labels[13])
         median=st.number_input(Labels[17], value=statistics.median([meas1,meas2,meas3]))

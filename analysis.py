@@ -13,37 +13,51 @@ def comparison():
         st.session_state.clear_data=False
     file = st.date_input('**測定日**', value='today')
     total = st.number_input('**班数**', value=12)
-    if st.button('**データ更新**'):
-        st.session_state.df_analysis=pd.DataFrame()
-        st.session_state.df_total=pd.DataFrame()
-        conn = sqlite3.connect('meas_database.db')
-        c=conn.cursor()
-        
-        st.session_state.df_analysis=pd.read_sql_query('SELECT * FROM `%s`'% str(file), conn)
 
-        conn.close()
+    db_file='meas_database.db'
+    colDupdate,colDdownload,colDummy=st.columns((1.2,1,5))
+    with colDupdate:
+        if st.button('**データ更新**'):
+            st.session_state.df_analysis=pd.DataFrame()
+            st.session_state.df_total=pd.DataFrame()
+            conn = sqlite3.connect(db_file)
+            c=conn.cursor()
+            
+            st.session_state.df_analysis=pd.read_sql_query('SELECT * FROM `%s`'% str(file), conn)
 
-        df_a=pd.DataFrame()
-        df_i=pd.DataFrame()
-        for i in range(total):
-            obj_id_add=[]
-            results_add=[]
-            dic={}
-            dic_sorted=[]
-            df_a=st.session_state.df_analysis[st.session_state.df_analysis['班番号']==i]
-            obj_id=df_a['被検者ID'].to_list()
-            results=df_a['正味値'].to_list()
-            if obj_id == []:
-                continue
-            dic.update(zip(obj_id,results))
-            dic_sorted = sorted(dic.items(), key=lambda x:x[0])
-            for dataset in dic_sorted:
-                obj_id_add.append(dataset[0])
-                if i==0:
-                    st.session_state.df_total=pd.DataFrame(index=obj_id_add)
-                results_add.append(dataset[1])
-            data=pd.Series(results_add,index=obj_id_add, name=i)
-            st.session_state.df_total=pd.concat([st.session_state.df_total,data], axis=1)
+            conn.close()
+
+            df_a=pd.DataFrame()
+            df_i=pd.DataFrame()
+            for i in range(total):
+                obj_id_add=[]
+                results_add=[]
+                dic={}
+                dic_sorted=[]
+                df_a=st.session_state.df_analysis[st.session_state.df_analysis['班番号']==i]
+                obj_id=df_a['被検者ID'].to_list()
+                results=df_a['正味値'].to_list()
+                if obj_id == []:
+                    continue
+                dic.update(zip(obj_id,results))
+                dic_sorted = sorted(dic.items(), key=lambda x:x[0])
+                for dataset in dic_sorted:
+                    obj_id_add.append(dataset[0])
+                    if i==0:
+                        st.session_state.df_total=pd.DataFrame(index=obj_id_add)
+                    results_add.append(dataset[1])
+                data=pd.Series(results_add,index=obj_id_add, name=i)
+                st.session_state.df_total=pd.concat([st.session_state.df_total,data], axis=1)
+
+    with colDdownload:
+        with open(db_file,'rb') as db:
+            db_data=db.read()
+
+        st.download_button(
+            label="**DB出力**",
+            data=db_data,
+            file_name=db_file
+        )
 
 
     st.subheader('**Data**')

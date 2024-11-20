@@ -57,7 +57,7 @@ def data_form():
 
     with colB1:
         if st.button('測定開始'):
-            Stime= datetime.now().time()
+            Stime= now
         start_time=st.time_input(Labels[10], value=Stime)
         obj_id = st.text_input(Labels[12], value=ID)
         meas1 = st.number_input(Labels[14])
@@ -66,7 +66,7 @@ def data_form():
 
     with colB2:
         if st.button('測定終了'):
-            Etime= datetime.now().time()
+            Etime= now
         end_time=st.time_input(Labels[11], value=Etime)
 
         obj_bg = st.number_input(Labels[13])

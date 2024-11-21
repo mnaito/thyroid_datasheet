@@ -59,7 +59,7 @@ def comparison():
             file_name=db_file
         )
 
-    colDheader, colDcsv=st.columns((1,7))
+    colDheader, colDcsv=st.columns((1,8))
 
     with colDheader:
         st.subheader('**Data**')

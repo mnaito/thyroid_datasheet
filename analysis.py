@@ -64,7 +64,7 @@ def comparison():
     colDheader, colDcsv=st.columns((1,8))
 
     with colDheader:
-        st.text('**Data**')
+        st.write('**Data**')
 
     with colDcsv:
         csv_data=st.session_state.df_analysis.to_csv(index=True, mode='w', header=True).encode('utf-8_sig')

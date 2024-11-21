@@ -59,24 +59,35 @@ def comparison():
             file_name=db_file
         )
 
+    colDheader, colDcsv=st.columns((3,5))
 
-    st.subheader('**Data**')
+    with colDheader:
+        st.subheader('**Data**')
+
+    with colDcsv:
+        csv_data=st.session_state.df_analysis.to_csv(index=True, mode='w', header=True).encode('utf-8_sig')
+        st.download_button(
+            label='**csv保存**',
+            data=csv_data,
+            file_name=str(file)+'.csv', 
+        )
+    
     st.dataframe(st.session_state.df_analysis,hide_index=True)
-    csv_data=st.session_state.df_analysis.to_csv(index=True, mode='w', header=True).encode('utf-8_sig')
-    st.download_button(
-        label='**csv保存**',
-        data=csv_data,
-        file_name=str(file)+'.csv', 
-    )
 
-    st.subheader('**Summary**')
+    colSheader,colScsv=st.columns((3,5))
+
+    with colSheader:
+        st.subheader('**Summary**')
+
+    with colScsv:
+        csv_summary=st.session_state.df_total.to_csv(index=True, mode='w', header=True).encode('utf-8_sig')
+        st.download_button(
+            label='**csv保存**',
+            data=csv_summary,
+            file_name=str(file)+'_summary.csv', 
+        )
+
     st.dataframe(st.session_state.df_total)
-    csv_summary=st.session_state.df_total.to_csv(index=True, mode='w', header=True).encode('utf-8_sig')
-    st.download_button(
-        label='**csv保存**',
-        data=csv_summary,
-        file_name=str(file)+'_summary.csv', 
-    )
 
     st.pyplot(st.session_state.df_total.plot.bar(ylabel='正味値', xlabel='被検者ID', rot=0).figure)
 

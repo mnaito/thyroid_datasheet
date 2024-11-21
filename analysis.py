@@ -64,7 +64,7 @@ def comparison():
     colDheader, colDcsv=st.columns((1,8))
 
     with colDheader:
-        st.write('**Data**')
+        st.subheader('**Data**')
 
     with colDcsv:
         csv_data=st.session_state.df_analysis.to_csv(index=True, mode='w', header=True).encode('utf-8_sig')
@@ -76,9 +76,9 @@ def comparison():
     
     st.dataframe(st.session_state.df_analysis,hide_index=True)
 
-    colSheader,colScsv=st.columns((1,4))
-
     st.markdown('---')
+
+    colSheader,colScsv=st.columns((1,4))
 
     with colSheader:
         st.subheader('**Summary**')

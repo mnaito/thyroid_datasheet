@@ -59,7 +59,7 @@ def comparison():
             file_name=db_file
         )
 
-    colDheader, colDcsv=st.columns((3,5))
+    colDheader, colDcsv=st.columns((1,6))
 
     with colDheader:
         st.subheader('**Data**')
@@ -74,7 +74,7 @@ def comparison():
     
     st.dataframe(st.session_state.df_analysis,hide_index=True)
 
-    colSheader,colScsv=st.columns((3,5))
+    colSheader,colScsv=st.columns((1,4))
 
     with colSheader:
         st.subheader('**Summary**')

@@ -17,7 +17,8 @@ def comparison():
     db_file='meas_database.db'
     colDupdate,colDdownload,colDummy=st.columns((1.3,1.1,5))
     with colDupdate:
-        if st.button('**データ取得**'):
+        get_button=st.button('**データ取得**')
+        if get_button:
             st.session_state.df_analysis=pd.DataFrame()
             st.session_state.df_total=pd.DataFrame()
             conn = sqlite3.connect(db_file)
@@ -59,10 +60,10 @@ def comparison():
             file_name=db_file
         )
 
+
     st.markdown('---')
 
     colDheader, colDcsv=st.columns((1,8))
-
     with colDheader:
         st.subheader('**Data**')
 
@@ -74,12 +75,12 @@ def comparison():
             file_name=str(file)+'.csv', 
         )
     
+
     st.dataframe(st.session_state.df_analysis,hide_index=True)
 
     st.markdown('---')
 
     colSheader,colScsv=st.columns((1,4))
-
     with colSheader:
         st.subheader('**Summary**')
 
@@ -91,22 +92,24 @@ def comparison():
             file_name=str(file)+'_summary.csv', 
         )
 
+
     st.dataframe(st.session_state.df_total)
 
-    st.pyplot(st.session_state.df_total.plot.bar(ylabel='正味値', xlabel='被検者ID', rot=0).figure)
+    if get_button:
+        st.pyplot(st.session_state.df_total.plot.bar(ylabel='正味値', xlabel='被検者ID', rot=0).figure)
 
-    means=[]
-    stdevs=[]
-    for k in range(st.session_state.df_total.shape[0]):
-        mean=statistics.mean(st.session_state.df_total.iloc[k])
-        means.append(mean)
-        stdev=statistics.stdev(st.session_state.df_total.iloc[k])
-        stdevs.append(stdev)
+        means=[]
+        stdevs=[]
+        for k in range(st.session_state.df_total.shape[0]):
+            mean=statistics.mean(st.session_state.df_total.iloc[k])
+            means.append(mean)
+            stdev=statistics.stdev(st.session_state.df_total.iloc[k])
+            stdevs.append(stdev)
 
-    fig,ax=plt.subplots()
-    ax.scatter(means,stdevs)
-    ax.set_xlabel('平均値')
-    ax.set_ylabel('標準偏差 (1$\\sigma$)')
-    st.pyplot(fig)
+        fig,ax=plt.subplots()
+        ax.scatter(means,stdevs)
+        ax.set_xlabel('平均値')
+        ax.set_ylabel('標準偏差 (1$\\sigma$)')
+        st.pyplot(fig)
     
 

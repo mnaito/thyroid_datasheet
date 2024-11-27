@@ -31,7 +31,7 @@ def comparison():
 
             df_a=pd.DataFrame()
             df_i=pd.DataFrame()
-            for i in range(total):
+            for i in range(total+1):
                 obj_id_add=[]
                 results_add=[]
                 dic={}

@@ -76,16 +76,16 @@ def data_form():
         obj_bg = st.number_input(Labels[13])
         median=statistics.median([meas1,meas2,meas3])
         st.write(Labels[17])
-        st.text('%.2f'%median)
+        st.text('%.3f'%median)
         med_sub=median-obj_bg
         st.write(Labels[18])
-        st.text('%.2f'%med_sub)
+        st.text('%.3f'%med_sub)
         result =med_sub*calibration_value
         st.write(Labels[19])
-        st.text('%.2f'%result)
+        st.text('%.3f'%result)
 
-    colD,colE,colC=st.columns((6,1.4,1.6))
-    with colD:
+    colA,colE,colC=st.columns((6,1.4,1.6))
+    with colA:
         if result > threshold:
             st.error(':red[補正値が基準値を超えています]')
 
@@ -96,8 +96,6 @@ def data_form():
             df_add=pd.DataFrame([Data],columns=Labels)
 
             st.session_state.df=pd.concat([st.session_state.df, df_add], ignore_index=True)
-
-
 
     with colC:
         if st.button('保存/終了'):

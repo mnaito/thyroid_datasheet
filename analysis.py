@@ -13,6 +13,7 @@ def comparison():
         st.session_state.clear_data=False
     file = st.date_input('**測定日**', value='today')
     total = st.number_input('**班数**', value=12)
+    df_output=pd.DataFrame()
 
     db_file='meas_database.db'
     colDupdate,colDdownload,colDummy=st.columns((1.3,1.1,5))
@@ -50,6 +51,21 @@ def comparison():
                 data=pd.Series(results_add,index=obj_id_add, name=i)
                 st.session_state.df_total=pd.concat([st.session_state.df_total,data], axis=1)
 
+            means=[]
+            stdevs=[]
+            for k in range(st.session_state.df_total.shape[0]):
+                mean=statistics.mean(st.session_state.df_total.iloc[k])
+                means.append(mean)
+                stdev=statistics.stdev(st.session_state.df_total.iloc[k])
+                stdevs.append(stdev)
+
+            mean_data=pd.Series(means, index=st.session_state.df_total.index, name='mean')
+            stdev_data=pd.Series(stdevs, index=st.session_state.df_total.index, name='stdev')
+
+            df_output=pd.concat([st.session_state.df_total,mean_data], axis=1)
+            df_output=pd.concat([df_output,stdev_data], axis=1)
+
+
     with colDdownload:
         with open(db_file,'rb') as db:
             db_data=db.read()
@@ -68,7 +84,7 @@ def comparison():
         st.subheader('**Data**')
 
     with colDcsv:
-        csv_data=st.session_state.df_analysis.to_csv(index=True, mode='w', header=True).encode('utf-8_sig')
+        csv_data=st.session_state.df_analysis.to_csv(index=True, mode='w', header=True, float_format='%.4f').encode('utf-8_sig')
         st.download_button(
             label='**csv保存**',
             data=csv_data,
@@ -85,26 +101,19 @@ def comparison():
         st.subheader('**Summary**')
 
     with colScsv:
-        csv_summary=st.session_state.df_total.to_csv(index=True, mode='w', header=True).encode('utf-8_sig')
+        csv_summary=df_output.to_csv(index=True, mode='w', header=True, float_format='%.4f').encode('utf-8_sig')
         st.download_button(
             label='**csv保存**',
             data=csv_summary,
             file_name=str(file)+'_summary.csv', 
         )
 
-
     st.dataframe(st.session_state.df_total)
 
     if get_button:
         st.pyplot(st.session_state.df_total.plot.bar(ylabel='正味値', xlabel='被検者ID', rot=0).figure)
 
-        means=[]
-        stdevs=[]
-        for k in range(st.session_state.df_total.shape[0]):
-            mean=statistics.mean(st.session_state.df_total.iloc[k])
-            means.append(mean)
-            stdev=statistics.stdev(st.session_state.df_total.iloc[k])
-            stdevs.append(stdev)
+
 
         fig,ax=plt.subplots()
         ax.scatter(means,stdevs)

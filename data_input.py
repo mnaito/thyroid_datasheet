@@ -76,13 +76,13 @@ def data_form():
         obj_bg = st.number_input(Labels[13])
         median=statistics.median([meas1,meas2,meas3])
         st.write(Labels[17])
-        st.text('%.3f'%median)
+        st.text('%.3g'%median)
         med_sub=median-obj_bg
         st.write(Labels[18])
-        st.text('%.3f'%med_sub)
+        st.text('%.3g'%med_sub)
         result =med_sub*calibration_value
         st.write(Labels[19])
-        st.text('%.3f'%result)
+        st.text('%.3g'%result)
 
     colA,colE,colC=st.columns((6,1.4,1.6))
     with colA:

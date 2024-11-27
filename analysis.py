@@ -84,7 +84,7 @@ def comparison():
         st.subheader('**Data**')
 
     with colDcsv:
-        csv_data=st.session_state.df_analysis.to_csv(index=True, mode='w', header=True, float_format='%.4f').encode('utf-8_sig')
+        csv_data=st.session_state.df_analysis.to_csv(index=True, mode='w', header=True, float_format='%.3g').encode('utf-8_sig')
         st.download_button(
             label='**csv保存**',
             data=csv_data,
@@ -101,7 +101,7 @@ def comparison():
         st.subheader('**Summary**')
 
     with colScsv:
-        csv_summary=df_output.to_csv(index=True, mode='w', header=True, float_format='%.4f').encode('utf-8_sig')
+        csv_summary=df_output.to_csv(index=True, mode='w', header=True, float_format='%.3g').encode('utf-8_sig')
         st.download_button(
             label='**csv保存**',
             data=csv_summary,

@@ -24,9 +24,9 @@ def data_form():
 
     Gnumber=0
     date_value='today'
-    meas_place='meas_place'
-    player_members='/'
-    machine_label='machine_number'
+    #meas_place=Labels[2]
+    #player_members=Labels[3]
+    #machine_label=Labels[4]
     calibrationD='today'
     calibrationV=1.00
     environment=0.05
@@ -34,7 +34,7 @@ def data_form():
     #Stime=now
     #Etime=now
     threshold_value=0.2
-    ID='被検者ID'
+    #ID='被検者ID'
 
 
     colU1, colU2 = st.columns(2)
@@ -42,13 +42,13 @@ def data_form():
     with colU1:
         group_num=st.number_input(Labels[0], value=Gnumber)
         date = st.date_input(Labels[1], value=date_value)
-        place = st.text_input(Labels[2], value=meas_place)
-        players = st.text_input(Labels[3], value=player_members)
+        place = st.text_input(Labels[2], placeholder=Labels[2])
+        players = st.text_input(Labels[3], placeholder=Labels[3])
 
         env_bg = st.number_input(Labels[8], value=environment)
 
     with colU2:
-        machine_num = st.text_input(Labels[4], value=machine_label)
+        machine_num = st.text_input(Labels[4], placeholder=Labels[4])
         calibration_date = st.date_input(Labels[5], value=calibrationD)
         calibration_value = st.number_input(Labels[6], value=calibrationV)
         time_const = st.selectbox(Labels[7], options=['3','10','30'], index=1)
@@ -63,7 +63,7 @@ def data_form():
         if st.button('測定開始'):
             st.session_state.Stime= datetime.now(ZoneInfo("Asia/Tokyo")).time()
         start_time=st.time_input(Labels[10], value=st.session_state.Stime)
-        obj_id = st.text_input(Labels[12], value=ID)
+        obj_id = st.text_input(Labels[12], placeholder=Labels[12])
         meas1 = st.number_input(Labels[14])
         meas2 = st.number_input(Labels[15])
         meas3 = st.number_input(Labels[16])

@@ -34,7 +34,6 @@ def data_form():
     #Stime=now
     #Etime=now
     threshold_value=0.2
-    #ID='被検者ID'
 
 
     colU1, colU2 = st.columns(2)
@@ -63,7 +62,7 @@ def data_form():
         if st.button('測定開始'):
             st.session_state.Stime= datetime.now(ZoneInfo("Asia/Tokyo")).time()
         start_time=st.time_input(Labels[10], value=st.session_state.Stime)
-        obj_id = st.text_input(Labels[12], placeholder=Labels[12])
+        obj_id = st.text_input(Labels[12], placeholder=Labels[12], key="ID")
         meas1 = st.number_input(Labels[14])
         meas2 = st.number_input(Labels[15])
         meas3 = st.number_input(Labels[16])
@@ -90,15 +89,19 @@ def data_form():
             st.error(':red[補正値が基準値を超えています]')
 
     with colE:
-        if st.button('入力/次へ'):
+        def input_and_next():
             Data=[group_num,date,place,players,machine_num,calibration_date,calibration_value,time_const,
                 env_bg,threshold,start_time,end_time,obj_id,obj_bg,meas1,meas2,meas3,median,med_sub,result]
             df_add=pd.DataFrame([Data],columns=Labels)
 
             st.session_state.df=pd.concat([st.session_state.df, df_add], ignore_index=True)
+            st.session_state["ID"]=''
+
+        st.button('入力/次へ', on_click=input_and_next)
+            
 
     with colC:
-        if st.button('保存/終了'):
+        def save_and_finish():
             conn = sqlite3.connect('meas_database.db')
             c=conn.cursor()
 
@@ -106,6 +109,8 @@ def data_form():
 
             conn.close()
             st.session_state.df=pd.DataFrame(columns=Labels)
+
+        st.button('保存/終了', on_click=save_and_finish)
 
     st.markdown('---')
 

@@ -34,6 +34,9 @@ def data_form():
     #Stime=now
     #Etime=now
     threshold_value=0.2
+    IDs=['あ','い','う','え','お',
+         'か','き','く','け','こ',
+         'さ','し','す','せ','そ']
 
 
     colU1, colU2 = st.columns(2)
@@ -62,7 +65,7 @@ def data_form():
         if st.button('測定開始'):
             st.session_state.Stime= datetime.now(ZoneInfo("Asia/Tokyo")).time()
         start_time=st.time_input(Labels[10], value=st.session_state.Stime)
-        obj_id = st.text_input(Labels[12], placeholder=Labels[12], key="ID")
+        obj_id = st.selectbox(Labels[12], options=IDs, placeholder=Labels[12], index=None, key="ID")
         meas1 = st.number_input(Labels[14])
         meas2 = st.number_input(Labels[15])
         meas3 = st.number_input(Labels[16])
@@ -95,7 +98,7 @@ def data_form():
             df_add=pd.DataFrame([Data],columns=Labels)
 
             st.session_state.df=pd.concat([st.session_state.df, df_add], ignore_index=True)
-            st.session_state["ID"]=''
+            st.session_state["ID"]=None
 
         st.button('入力/次へ', on_click=input_and_next)
             

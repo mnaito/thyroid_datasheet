@@ -113,8 +113,6 @@ def comparison():
     if get_button:
         st.pyplot(st.session_state.df_total.plot.bar(ylabel='正味値', xlabel='被検者ID', rot=0).figure)
 
-
-
         fig,ax=plt.subplots()
         ax.scatter(means,stdevs)
         ax.set_xlabel('平均値')

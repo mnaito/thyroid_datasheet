@@ -36,7 +36,8 @@ def data_form():
     threshold_value=0.2
     IDs=['あ','い','う','え','お',
          'か','き','く','け','こ',
-         'さ','し','す','せ','そ']
+         'さ','し','す','せ','そ', 
+         'A', 'B', 'C']
 
 
     colU1, colU2 = st.columns(2)
@@ -87,22 +88,23 @@ def data_form():
         st.text('%.3g'%result)
 
     colA,colE,colC=st.columns((6,1.4,1.6))
-    with colA:
-        if result > threshold:
-            st.error(':red[補正値が基準値を超えています]')
-
     with colE:
         def input_and_next():
-            Data=[group_num,date,place,players,machine_num,calibration_date,calibration_value,time_const,
-                env_bg,threshold,start_time,end_time,obj_id,obj_bg,meas1,meas2,meas3,median,med_sub,result]
-            df_add=pd.DataFrame([Data],columns=Labels)
+            if obj_id!=None:
+                Data=[group_num,date,place,players,machine_num,calibration_date,calibration_value,time_const,
+                    env_bg,threshold,start_time,end_time,obj_id,obj_bg,meas1,meas2,meas3,median,med_sub,result]
+                df_add=pd.DataFrame([Data],columns=Labels)
 
-            st.session_state.df=pd.concat([st.session_state.df, df_add], ignore_index=True)
-            st.session_state["ID"]=None
+                st.session_state.df=pd.concat([st.session_state.df, df_add], ignore_index=True)
+                st.session_state["ID"]=None
+            elif obj_id==None:
+                @st.dialog('Error')
+                def input_error():
+                    st.error('被検者IDが選択されていません')
+                input_error()
 
-        st.button('入力/次へ', on_click=input_and_next)
+        input_button=st.button('入力/次へ', on_click=input_and_next)
             
-
     with colC:
         def save_and_finish():
             conn = sqlite3.connect('meas_database.db')
@@ -111,9 +113,19 @@ def data_form():
             st.session_state.df.to_sql(str(date),conn,if_exists='append', index=False)
 
             conn.close()
-            st.session_state.df=pd.DataFrame(columns=Labels)
+            #st.session_state.df=pd.DataFrame(columns=Labels)
+            @st.dialog('Success')
+            def success_save():
+                st.success('データ保存されました')
+            success_save()
 
-        st.button('保存/終了', on_click=save_and_finish)
+        submit_button=st.button('保存/終了', on_click=save_and_finish)
+
+    with colA:
+        if result > threshold:
+            st.error(':red[補正値が基準値を超えています]')
+#        if submit_button:
+#            st.write('データ保存されました')
 
     st.markdown('---')
 
